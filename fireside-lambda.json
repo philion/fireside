@@ -1,0 +1,8 @@
+{
+    "FunctionName": "Session-Example-Skill",
+    "Runtime": "java8",
+    "Handler": "session.SessionSpeechletRequestStreamHandler",
+    "Description": "",
+    "Timeout": 0,
+    "Publish": true
+}
