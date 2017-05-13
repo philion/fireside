@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonTemplate {
-    private static final Logger LOG = LoggerFactory.getLogger(Monsters.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JsonTemplate.class);
 
     public static String DEFAULT_ROOT_NAME = "template";
     
@@ -75,26 +75,27 @@ public class JsonTemplate {
     }
 
     public Map<String, String> fill() {
-        return this.fill(this.get().asText());
+    	HashMap<String,String> attrs = new HashMap<>();
+    	String value = this.fill(this.get().asText(), attrs);
+    	attrs.put("value", value);
+    	return attrs;
     }
     
-    public Map<String, String> fill(String tmpl) {
-        Map<String,String> attrs = new HashMap<>();
-        attrs.put("template", tmpl);
-    
+    public String fill(String tmpl, Map<String,String> attrs) {    
         List<String> keys = this.keys(tmpl);
         // LOG.info("Loaded keys: {}", keys);
         
         String whole = tmpl;
         for (String key : keys) {
             String value = this.get(key).asText();
+            
+            value = this.fill(value, attrs);
+            
             attrs.put(key, value);
             //LOG.info("{} == {}", key, value);
             whole = whole.replace("@"+key, value);
         }
-        
-        attrs.put("value", whole);
-        
-        return attrs;
+                
+        return whole;
     }
 }
