@@ -4,6 +4,8 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %42.42logger{42} %msg%n</pattern>
         </encoder>
     </appender>
+
+    <logger name="com.acmerocket" level="debug"/>
     
     <!--
     <logger name="com.sun.jersey.api.container.filter.LoggingFilter" level="trace" /> // turn on jersey tracing   

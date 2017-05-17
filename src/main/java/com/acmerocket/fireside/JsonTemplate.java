@@ -1,7 +1,9 @@
 package com.acmerocket.fireside;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,13 +39,16 @@ public class JsonTemplate {
             return null;
         }
     }
-
-    public static JsonTemplate load(File file) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(file);
+    
+    public static JsonTemplate load(InputStream in) throws IOException {
+    	ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(in);
         //LOG.info("Loaded JSON: {}", root);
         //LOG.info("Template: {}", root.get("template").get(0));
-        return new JsonTemplate(root);
+        return new JsonTemplate(root);    }
+
+    public static JsonTemplate load(File file) throws IOException {
+        return load(new FileInputStream(file));
     }
     
     public JsonNode get() {
@@ -61,7 +66,7 @@ public class JsonTemplate {
         return node;
     }
 
-    public List<String> keys(String str) {
+    public static List<String> keys(String str) {
         List<String> found = new ArrayList<>();
         
         // parse out @ words
@@ -82,8 +87,7 @@ public class JsonTemplate {
     }
     
     public String fill(String tmpl, Map<String,String> attrs) {    
-        List<String> keys = this.keys(tmpl);
-        // LOG.info("Loaded keys: {}", keys);
+        List<String> keys = keys(tmpl);
         
         String whole = tmpl;
         for (String key : keys) {
@@ -92,8 +96,8 @@ public class JsonTemplate {
             value = this.fill(value, attrs);
             
             attrs.put(key, value);
-            //LOG.info("{} == {}", key, value);
-            whole = whole.replace("@"+key, value);
+            LOG.debug("{} == {}", key, value);
+            whole = whole.replace("@"+key, value); // bug: replaces @key in @keyplace. need to bind to white space. see #testArmorIng
         }
                 
         return whole;
