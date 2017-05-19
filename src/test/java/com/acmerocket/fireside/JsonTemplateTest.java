@@ -41,4 +41,6 @@ public class JsonTemplateTest {
 			assertTrue("'" + result + "' doesn't contain '" + map.get(key) + "'", result.contains(map.get(key)));
 		}
 	}
+	
+	
 }

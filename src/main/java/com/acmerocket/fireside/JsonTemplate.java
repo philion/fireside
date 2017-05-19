@@ -22,7 +22,8 @@ public class JsonTemplate {
 
     public static String DEFAULT_ROOT_NAME = "template";
     
-    private static final Pattern KEY_PATTERN = Pattern.compile("@(\\w+)");
+    private static final String KEY = "@";
+    private static final Pattern KEY_PATTERN = Pattern.compile(KEY+"(\\w+)\\s");
     
     private final JsonNode root; 
     
@@ -86,20 +87,27 @@ public class JsonTemplate {
     	return attrs;
     }
     
-    public String fill(String tmpl, Map<String,String> attrs) {    
-        List<String> keys = keys(tmpl);
-        
-        String whole = tmpl;
-        for (String key : keys) {
-            String value = this.get(key).asText();
-            
-            value = this.fill(value, attrs);
-            
-            attrs.put(key, value);
-            LOG.debug("{} == {}", key, value);
-            whole = whole.replace("@"+key, value); // bug: replaces @key in @keyplace. need to bind to white space. see #testArmorIng
+    public String fill(String tmpl, Map<String,String> attrs) {
+    	String result = "";
+    	
+    	for (String token : tmpl.split("\\s")) {
+    		if (token.startsWith(KEY)) {
+                String key = token.substring(KEY.length());
+    			String value = this.get(key).asText();
+                
+                value = this.fill(value, attrs);
+                
+                attrs.put(key, value);
+                //LOG.debug("{} == {}", key, value);
+                
+                result += value + " ";
+    		}
+    		else {
+    			result += token + " ";
+    		}    		
         }
                 
-        return whole;
+    	//LOG.debug("result: {}", result);
+        return result.trim();
     }
 }
