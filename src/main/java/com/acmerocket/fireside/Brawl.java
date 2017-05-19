@@ -1,5 +1,6 @@
 package com.acmerocket.fireside;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,28 +10,28 @@ import org.slf4j.LoggerFactory;
 public class Brawl implements Runnable {
     private static final Logger LOG = LoggerFactory.getLogger(Brawl.class);
 
-    private final Monster[] compatants;
+    private final Creature[] compatants;
     
-    public Brawl(int size) {
-        Monster[] monsters = new Monster[size];
+    public Brawl(int size) throws IOException {
+        Creature[] monsters = new Creature[size];
         for (int i = 0; i < monsters.length; i++) {
-            monsters[i] = Monsters.load().generate();
+            monsters[i] = Creatures.instance().generate();
         }
         this.compatants = monsters;
     }
     
-    public Brawl(Monster...monsters) {
+    public Brawl(Creature...monsters) {
         this.compatants = monsters;
     }
     
     @Override
     public void run() {
-        List<Monster> monsters = this.initiative(this.compatants);
-        int living = monsters.size();
+        List<Creature> creatures = this.initiative(this.compatants);
+        int living = creatures.size();
         while (living > 1) {
             // fight!
-            for (Monster source : monsters) {
-                Monster target = source.selectTarget(monsters);
+            for (Creature source : creatures) {
+                Creature target = source.selectTarget(creatures);
                 Roll attack = Roll.attack(source);
                 if (attack.hits(target)) {
                     Roll damage = Roll.damage(source, target);
@@ -53,15 +54,15 @@ public class Brawl implements Runnable {
         }
     }
 
-    protected List<Monster> initiative(Monster[] monsterAry) {
+    protected List<Creature> initiative(Creature[] monsterAry) {
         List<Roll> initRolls = new ArrayList<>(monsterAry.length);
         
-        for (Monster monster : monsterAry) {
-            initRolls.add(Roll.initiative(monster));            
+        for (Creature creature : monsterAry) {
+            initRolls.add(Roll.initiative(creature));            
         }
         initRolls.sort(null);
                 
-        List<Monster> fighters = new ArrayList<>(monsterAry.length);
+        List<Creature> fighters = new ArrayList<>(monsterAry.length);
         for (Roll roll : initRolls) {
             fighters.add(roll.source());
             LOG.trace("{}", roll);

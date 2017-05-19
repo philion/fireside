@@ -12,17 +12,17 @@ public class Roll implements Comparable<Roll> {
     
     private final Type type;
     private final int value;
-    private final Monster source;
-    private final Monster target;
+    private final Creature source;
+    private final Creature target;
     
-    private Roll(Type type, int value, Monster source, Monster target) {
+    private Roll(Type type, int value, Creature source, Creature target) {
         this.type = type;
         this.value = value;
         this.source = source;
         this.target = target;
     }
         
-    public static Roll initiative(Monster source) {
+    public static Roll initiative(Creature source) {
         int initiativeVal = d20() + source.movement();
         if (source.isSneaky()) {
             initiativeVal += 2;
@@ -30,19 +30,19 @@ public class Roll implements Comparable<Roll> {
         return new Roll(Type.initiative, initiativeVal, source, null);        
     }
 
-    public static Roll attack(Monster source) {
+    public static Roll attack(Creature source) {
         int value = d20() + source.level();
         return new Roll(Type.attack, value, source, null);
     }
 
-    public static Roll damage(Monster source, Monster target) {
+    public static Roll damage(Creature source, Creature target) {
         int damage = roll(source.damage());
         return new Roll(Type.damage, damage, source, target);        
     }
     
     // ----
     
-    public boolean hits(Monster target) {
+    public boolean hits(Creature target) {
         if (this.type == Type.attack && this.value > target.getAC()) {
             return true;
         }
@@ -81,7 +81,7 @@ public class Roll implements Comparable<Roll> {
         }
     }
 
-    public Monster source() {
+    public Creature source() {
         return this.source;
     }
     

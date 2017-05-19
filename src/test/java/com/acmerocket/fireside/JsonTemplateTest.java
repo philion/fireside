@@ -18,7 +18,7 @@ package com.acmerocket.fireside;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -33,14 +33,16 @@ public class JsonTemplateTest {
 	@Test
 	public void testArmorIng() throws IOException {
 		JsonTemplate template = JsonTemplate.load(this.getClass().getResourceAsStream("/json-template.json"));
-		Map<String,String> map = new HashMap<>();
-		String testTmpl = "@armor of @armoring";
 		
-		String result = template.fill("@armor of @armoring", map);
-		for (String key : JsonTemplate.keys(testTmpl)) {
-			assertTrue("'" + result + "' doesn't contain '" + map.get(key) + "'", result.contains(map.get(key)));
+		Map<String,String> map = template.fill("item");
+		String result = map.get("value");
+		String tmplValue = template.get("item");
+		List<String> keys = JsonTemplate.keys(tmplValue);
+		for (String key : keys) {
+			String check = map.get(key);
+			if (check != null  && check.length() > 0) {
+				assertTrue("'" + result + "' doesn't contain '" + check + "'", result.contains(check));
+			}
 		}
 	}
-	
-	
 }

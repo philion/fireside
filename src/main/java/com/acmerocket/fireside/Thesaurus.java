@@ -35,28 +35,38 @@ public class Thesaurus {
     
     private static final String THESAURUS_FILE = "/thesaurus.csv";
 
-	private final Map<String,Set<String>> index = new HashMap<>();
+	private final Map<String,Set<String>> index;
 	
 	public static synchronized Thesaurus instance() {
 		return new Thesaurus(Thesaurus.class.getResourceAsStream(THESAURUS_FILE));
 	}
 	
 	public Thesaurus(InputStream in) {
-		Scanner scanner = new Scanner(in);
-		while(scanner.hasNextLine()) {
-			String line= scanner.nextLine();
-			String[] words = line.split(",");
-			//LOG.debug("Loading: {}[{}]", words[0], words.length);
-			
-			Set<String> synonyms = new HashSet<String>();
-			Collections.addAll(synonyms, words);
-			
-			for (String word : words) {
-				this.index.put(word, synonyms);
+		this.index = load(in);
+	}
+	
+	private static Map<String,Set<String>> load(InputStream in) {
+		long start = System.currentTimeMillis();
+		
+		Map<String,Set<String>> index = new HashMap<>();
+
+		try(Scanner scanner = new Scanner(in)) {
+			while(scanner.hasNextLine()) {
+				String line= scanner.nextLine();
+				String[] words = line.split(",");
+				//LOG.debug("Loading: {}[{}]", words[0], words.length);
+				
+				Set<String> synonyms = new HashSet<String>();
+				Collections.addAll(synonyms, words);
+				
+				for (String word : words) {
+					index.put(word, synonyms);
+				}
 			}
+			scanner.close();
+			LOG.debug("Loaded {} words in {}ms", index.size(), System.currentTimeMillis() - start);
+			return index;
 		}
-		scanner.close();
-		LOG.debug("Loaded {} words", this.index.size());
 	}
 	
 	public String get(String word) {

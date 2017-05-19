@@ -1,8 +1,8 @@
 package com.acmerocket.fireside;
 
 public class Attack {
-    Monster source;
-    Monster target;
+    Creature source;
+    Creature target;
     Weapon weapon;
     Armor armor;
     int toHit;

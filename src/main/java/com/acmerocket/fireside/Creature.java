@@ -6,8 +6,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Monster {
-    private static final Logger LOG = LoggerFactory.getLogger(Monster.class);
+public class Creature {
+    private static final Logger LOG = LoggerFactory.getLogger(Creature.class);
 
     private final Race race;
     private final CharClass clss;
@@ -20,7 +20,7 @@ public class Monster {
     private int experience;
     private int hitpoints;
     
-    public Monster(Map<String, String> attrs) {
+    public Creature(Map<String, String> attrs) {
         this.race = Race.valueOf(attrs.get("race"));
         this.clss = CharClass.valueOf(attrs.get("dclass"));
         this.description = attrs.get("value");
@@ -33,12 +33,12 @@ public class Monster {
      * Select a target from a list of enemies
      * @return
      */
-    public Monster selectTarget(List<Monster> enemies) {
+    public Creature selectTarget(List<Creature> enemies) {
         // select highest hitpoints, except me.
         
-        Monster target = null;
+        Creature target = null;
         int hp = Integer.MAX_VALUE;
-        for (Monster enemy : enemies) {
+        for (Creature enemy : enemies) {
             if (enemy.hp() < hp  && enemy != this) {
                 target = enemy;
                 hp = enemy.hp();

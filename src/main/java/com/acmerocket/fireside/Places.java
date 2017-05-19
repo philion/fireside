@@ -3,30 +3,30 @@ package com.acmerocket.fireside;
 import java.io.IOException;
 import java.util.Map;
 
-public class Quests {
+public class Places {
     //private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(Quests.class);
 
-    public static String TEMPLATE_FILE = "/quests.json";
+    public static String TEMPLATE_FILE = "/quests.json"; // FIXME
     
     private final JsonTemplate template;
 
-    private Quests(JsonTemplate template) {
+    private Places(JsonTemplate template) {
         this.template = template;
     }
     
-    public Quests() throws IOException {
-        this(JsonTemplate.load(Quests.class.getResourceAsStream(TEMPLATE_FILE)));
+    public Places() throws IOException {
+        this(JsonTemplate.load(Places.class.getResourceAsStream(TEMPLATE_FILE)));
     }
     
-    public Quests(String filename) throws IOException {
+    public Places(String filename) throws IOException {
         this(JsonTemplate.load(filename));
     }
 
-    public Quest generate() {
-        Map<String,String> attrs = this.template.fill();
+    public Thing generate() {
+        Map<String,String> attrs = this.template.fill("location");
         //LOG.info("Loaded attrs: {}", attrs);
         
-        return new Quest(attrs);
+        return new Thing(attrs);
     }
     
     public static void main(String[] args) throws IOException {
@@ -35,7 +35,7 @@ public class Quests {
     		iter = Integer.parseInt(args[0]);
     	}
     	
-    	Quests quests = new Quests();
+    	Places quests = new Places();
     	
     	for (int i = 0; i < iter; i++) {
     		System.out.println(quests.generate());
