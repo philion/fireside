@@ -31,7 +31,7 @@
     "armoring": ["protection", "toughness", "healing", "defense", "the champion"],
     "fanciness": ["@weaponing", "@armoring", "nakedness", "stealth", "annoyance", "the dead"],
     
-    "villian": [ "@adjective @race @dclass from @location who @backstory" ],
+    "villian": [ "@adjective @race @dclass who @backstory" ],
 
     "adjective": [
         "bigoted",
