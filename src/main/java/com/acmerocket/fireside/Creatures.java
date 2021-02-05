@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public class Creatures {
-    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(Quests.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(MainQuest.class);
 
     public static String TEMPLATE_FILE = "/quests.json";
     

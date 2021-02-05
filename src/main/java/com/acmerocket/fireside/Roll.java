@@ -13,13 +13,13 @@ public class Roll implements Comparable<Roll> {
     private final Type type;
     private final int value;
     private final Creature source;
-    private final Creature target;
+    //private final Creature target;
     
     private Roll(Type type, int value, Creature source, Creature target) {
         this.type = type;
         this.value = value;
         this.source = source;
-        this.target = target;
+        //this.target = target;
     }
         
     public static Roll initiative(Creature source) {

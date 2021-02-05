@@ -3,22 +3,22 @@ package com.acmerocket.fireside;
 import java.io.IOException;
 import java.util.Map;
 
-public class Quests {
+public class MainQuest {
     //private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(Quests.class);
 
     public static String TEMPLATE_FILE = "/quests.json";
     
     private final JsonTemplate template;
 
-    private Quests(JsonTemplate template) {
+    private MainQuest(JsonTemplate template) {
         this.template = template;
     }
     
-    public Quests() throws IOException {
-        this(JsonTemplate.load(Quests.class.getResourceAsStream(TEMPLATE_FILE)));
+    public MainQuest() throws IOException {
+        this(JsonTemplate.load(MainQuest.class.getResourceAsStream(TEMPLATE_FILE)));
     }
     
-    public Quests(String filename) throws IOException {
+    public MainQuest(String filename) throws IOException {
         this(JsonTemplate.load(filename));
     }
 
@@ -35,7 +35,7 @@ public class Quests {
     		iter = Integer.parseInt(args[0]);
     	}
     	
-    	Quests quests = new Quests();
+    	MainQuest quests = new MainQuest();
     	
     	for (int i = 0; i < iter; i++) {
     		System.out.println(quests.generate());
